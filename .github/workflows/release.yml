@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - ianmuchyri:changesets
+      - changesets
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
