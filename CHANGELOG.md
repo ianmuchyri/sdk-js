@@ -1,5 +1,11 @@
 # @absmach/magistrala-sdk
 
+## 0.3.13
+
+### Patch Changes
+
+- bf0743b: check workflow test
+
 ## 0.3.12
 
 ### Patch Changes
