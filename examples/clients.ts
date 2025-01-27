@@ -4,6 +4,7 @@ const defaultUrl = "http://localhost";
 
 const mySdk = new SDK({
   clientsUrl: `${defaultUrl}:9006`,
+  usersUrl: `${defaultUrl}:9002`,
 });
 
 const token = "<token>";
@@ -99,7 +100,7 @@ mySdk.clients
   });
 
 mySdk.clients
-  .ListUserClients("<userId>", { offset: 0, limit: 10 }, domainId, token)
+  .ListClientUsers("<clientId>", { offset: 0, limit: 10 }, domainId, token)
   .then((response: any) => {
     console.log("response:", response);
   })
