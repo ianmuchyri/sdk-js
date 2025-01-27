@@ -7,6 +7,8 @@ import type {
   HierarchyPage,
   Role,
   RolePage,
+  User,
+  UsersPage,
 } from "../src/sdk";
 
 enableFetchMocks();
@@ -24,6 +26,27 @@ describe("Groups", () => {
     level: 1,
     path: "holy terrain",
     status: "enabled",
+  };
+
+  const user: User = {
+    id: "886b4266-77d1-4258-abae-2931fb4f16de",
+    first_name: "tahliah",
+    last_name: "barnett",
+    tags: ["holy", "terrain"],
+    email: "fkatwigs@email.com",
+    credentials: {
+      username: "fkatwigs@email.com",
+      secret: "12345678",
+    },
+    role: "administrator",
+    status: "enabled",
+  };
+
+  const usersPage: UsersPage = {
+    users: [user],
+    total: 1,
+    offset: 0,
+    limit: 10,
   };
 
   const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9";
@@ -247,6 +270,18 @@ describe("Groups", () => {
     );
 
     expect(response).toEqual(groupsPage);
+  });
+
+  test("List group users should list users linked to a group", async () => {
+    fetchMock.mockResponseOnce(JSON.stringify(usersPage));
+
+    const response = await sdk.groups.ListGroupUsers(
+      groupId,
+      queryParams,
+      domainId,
+      token
+    );
+    expect(response).toEqual(usersPage);
   });
 
   test("List group actions should return all available actions for a domain", async () => {

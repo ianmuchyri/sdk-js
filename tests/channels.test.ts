@@ -1,10 +1,7 @@
 import fetchMock, { enableFetchMocks } from "jest-fetch-mock";
 
 import SDK from "../src/sdk";
-import type {
-  Channel,
-  ChannelsPage,
-} from "../src/sdk";
+import type { Channel, ChannelsPage, User, UsersPage } from "../src/sdk";
 
 enableFetchMocks();
 
@@ -29,6 +26,27 @@ describe("Channels", () => {
     limit: 10,
   };
   const queryParams = {
+    offset: 0,
+    limit: 10,
+  };
+
+  const user: User = {
+    id: "886b4266-77d1-4258-abae-2931fb4f16de",
+    first_name: "tahliah",
+    last_name: "barnett",
+    tags: ["holy", "terrain"],
+    email: "fkatwigs@email.com",
+    credentials: {
+      username: "fkatwigs@email.com",
+      secret: "12345678",
+    },
+    role: "administrator",
+    status: "enabled",
+  };
+
+  const usersPage: UsersPage = {
+    users: [user],
+    total: 1,
     offset: 0,
     limit: 10,
   };
@@ -67,7 +85,11 @@ describe("Channels", () => {
   test("Create channels should create multiple channels", async () => {
     fetchMock.mockResponseOnce(JSON.stringify(channels));
 
-    const response = await sdk.channels.CreateChannels(channels, domainId, token);
+    const response = await sdk.channels.CreateChannels(
+      channels,
+      domainId,
+      token
+    );
     expect(response).toEqual(channels);
   });
 
@@ -81,28 +103,44 @@ describe("Channels", () => {
   test("Update channel name and metadata should update a channel's name and metadata", async () => {
     fetchMock.mockResponseOnce(JSON.stringify(channel));
 
-    const response = await sdk.channels.UpdateChannelNameAndMetadata(channel, domainId, token);
+    const response = await sdk.channels.UpdateChannelNameAndMetadata(
+      channel,
+      domainId,
+      token
+    );
     expect(response).toEqual(channel);
   });
 
   test("Update channel tags should update channel's tags", async () => {
     fetchMock.mockResponseOnce(JSON.stringify(channel));
 
-    const response = await sdk.channels.UpdateChannelTags(channel, domainId, token);
+    const response = await sdk.channels.UpdateChannelTags(
+      channel,
+      domainId,
+      token
+    );
     expect(response).toEqual(channel);
   });
 
   test("Enable channel should enable a channel", async () => {
     fetchMock.mockResponseOnce(JSON.stringify(channel));
 
-    const response = await sdk.channels.EnableChannel(channelId, domainId, token);
+    const response = await sdk.channels.EnableChannel(
+      channelId,
+      domainId,
+      token
+    );
     expect(response).toEqual(channel);
   });
 
   test("Disable channel should disable a channel", async () => {
     fetchMock.mockResponseOnce(JSON.stringify(channel));
 
-    const response = await sdk.channels.DisableChannel(channelId, domainId, token);
+    const response = await sdk.channels.DisableChannel(
+      channelId,
+      domainId,
+      token
+    );
     expect(response).toEqual(channel);
   });
 
@@ -116,7 +154,7 @@ describe("Channels", () => {
     const response = await sdk.channels.DeleteChannel(
       channelId,
       domainId,
-      token,
+      token
     );
     expect(response).toEqual(deleteResponse);
   });
@@ -133,7 +171,7 @@ describe("Channels", () => {
       channelId,
       connectionType,
       domainId,
-      token,
+      token
     );
     expect(response).toEqual(connectClientResponse);
   });
@@ -150,7 +188,7 @@ describe("Channels", () => {
       channelId,
       connectionType,
       domainId,
-      token,
+      token
     );
     expect(response).toEqual(DisconnectClientResponse);
   });
@@ -167,7 +205,7 @@ describe("Channels", () => {
       channelIds,
       connectionType,
       domainId,
-      token,
+      token
     );
     expect(response).toEqual(connectResponse);
   });
@@ -184,7 +222,7 @@ describe("Channels", () => {
       channelIds,
       connectionType,
       domainId,
-      token,
+      token
     );
     expect(response).toEqual(DisconnectResponse);
   });
@@ -200,7 +238,7 @@ describe("Channels", () => {
       domainId,
       channelId,
       groupId,
-      token,
+      token
     );
     expect(response).toEqual(ChannelParentsResponse);
   });
@@ -215,8 +253,20 @@ describe("Channels", () => {
     const response = await sdk.channels.DeleteChannelParentGroup(
       domainId,
       channelId,
-      token,
+      token
     );
     expect(response).toEqual(ChannelParentsResponse);
+  });
+
+  test("List channel users should list users linked to a channel", async () => {
+    fetchMock.mockResponseOnce(JSON.stringify(usersPage));
+
+    const response = await sdk.channels.ListChannelUsers(
+      channelId,
+      queryParams,
+      domainId,
+      token
+    );
+    expect(response).toEqual(usersPage);
   });
 });
